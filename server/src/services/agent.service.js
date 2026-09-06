@@ -3,11 +3,12 @@ import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { createAgentTools } from '../config/agent.tools.js';
 import * as aiService from './ai.service.js';
 
-// Initialize the model
-const model = new ChatGoogleGenerativeAI({
-  model: 'gemini-2.5-flash',
-  apiKey: process.env.GEMINI_API_KEY,
-});
+// Model getter (lazy initialization)
+const getModel = () =>
+  new ChatGoogleGenerativeAI({
+    model: 'gemini-2.5-flash',
+    apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || 'dummy_key',
+  });
 
 const buildSystemInstruction = (data) => `You are a professional resume consultant helping a user build their resume through conversation.
 
@@ -47,7 +48,7 @@ export const runInterviewAgent = async (data) => {
   const tools = createAgentTools(context, aiService);
 
   const agent = createReactAgent({
-    llm: model,
+    llm: getModel(),
     tools,
     prompt: buildSystemInstruction(data),
   });
