@@ -2,6 +2,12 @@
 
 > An intelligent, full-stack ATS Resume Builder and Analyzer powered by the MERN stack and Google Gemini AI. Create professional, ATS-friendly resumes and get real-time AI scoring and tailored optimization recommendations.
 
+🚀 **Live Application:** [https://ats-resume-builder-client.vercel.app](https://ats-resume-builder-client.vercel.app)  
+⚙️ **Backend API:** [https://ats-resume-builder-gray.vercel.app](https://ats-resume-builder-gray.vercel.app)
+
+[![Live App](https://img.shields.io/badge/Live_App-ats--resume--builder--client.vercel.app-black?style=for-the-badge&logo=vercel)](https://ats-resume-builder-client.vercel.app)
+[![API Status](https://img.shields.io/badge/API-Online-brightgreen?style=for-the-badge&logo=node.js)](https://ats-resume-builder-gray.vercel.app)
+
 ---
 
 ## 🌟 Features
