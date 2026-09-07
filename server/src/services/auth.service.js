@@ -56,20 +56,28 @@ export const emailLogin = async (email, password) => {
 export const googleLogin = async (credential) => {
   const googleUser = await verifyGoogleToken(credential);
 
-  let user = await User.findOneAndUpdate( // Mongoose findOneAndUpdate with upsert (MongoDB: Update Operations)
-    { googleId: googleUser.googleId },
-    {
+  // Check if user already exists by googleId OR by email
+  let user = await User.findOne({
+    $or: [{ googleId: googleUser.googleId }, { email: googleUser.email.toLowerCase() }],
+  });
+
+  if (user) {
+    // Link Google account and update profile if needed
+    user.googleId = googleUser.googleId;
+    user.name = user.name || googleUser.name;
+    user.picture = googleUser.picture || user.picture;
+    user.lastLogin = new Date();
+    await user.save();
+  } else {
+    // Create new Google user
+    user = await User.create({
       googleId: googleUser.googleId,
-      email: googleUser.email,
+      email: googleUser.email.toLowerCase(),
       name: googleUser.name,
       picture: googleUser.picture,
       lastLogin: new Date(),
-    },
-    {
-      returnDocument: 'after',
-      upsert: true,
-    }
-  );
+    });
+  }
 
   const token = generateToken(user);
 

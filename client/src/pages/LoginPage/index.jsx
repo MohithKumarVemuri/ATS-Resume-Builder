@@ -43,7 +43,8 @@ function LoginPage() {
       toast.success('Welcome!');
       navigate('/home');
     } catch (error) {
-      toast.error('Google login failed');
+      console.error('Google login error:', error);
+      toast.error(error.response?.data?.message || 'Google login failed');
     }
   };
 

@@ -9,9 +9,11 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // OAuth cl
 // Using async/await pattern (JS Essentials: Async/Await)
 const verifyGoogleToken = async (credential) => {
   try {
-    const ticket = await googleClient.verifyIdToken({ // Google token verification (Express.js: OAuth Integration)
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const client = new OAuth2Client(clientId);
+    const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: clientId,
     });
 
     const payload = ticket.getPayload();
@@ -24,7 +26,7 @@ const verifyGoogleToken = async (credential) => {
     };
   } catch (error) {
     console.error('Google token verification failed:', error.message);
-    throw new Error('Invalid Google token');
+    throw new Error(`Google token verification failed: ${error.message}`);
   }
 };
 
