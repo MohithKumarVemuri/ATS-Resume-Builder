@@ -39,70 +39,54 @@
 
 ---
 
-## 🚀 Deployment Guide (Vercel + Render + MongoDB Atlas)
+## 🚀 Deployment Architecture (Vercel Serverless + MongoDB Atlas)
 
-Follow these 3 easy steps to host your ATS Resume Builder completely free.
+Both the frontend and backend are deployed 100% free on **Vercel** with **MongoDB Atlas Cloud**.
 
-### Step 1: Set Up MongoDB Atlas (Database)
+### Live URLs
+- **Frontend App**: [https://ats-resume-builder-client.vercel.app](https://ats-resume-builder-client.vercel.app)
+- **Backend API**: [https://ats-resume-builder-gray.vercel.app](https://ats-resume-builder-gray.vercel.app)
 
-1. Sign up or log into [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
-2. Create a free shared cluster (**M0 Free Tier**).
-3. Under **Database Access**, create a database user (save the username and password).
-4. Under **Network Access**, click **Add IP Address** and select **Allow Access from Anywhere (`0.0.0.0/0`)**.
-5. Click **Connect** on your cluster > **Drivers** > copy the connection string:
-   ```
+---
+
+### 1. Database (MongoDB Atlas)
+1. Create a free shared cluster (**M0 Free Tier**) on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+2. Under **Network Access**, allow access from anywhere (`0.0.0.0/0`).
+3. Under **Database Access**, create a user and copy the connection string:
+   ```text
    mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/ats-resume-builder?retryWrites=true&w=majority
    ```
 
 ---
 
-### Step 2: Deploy Backend to Render
-
-1. Sign in to [Render](https://render.com/).
-2. Click **New +** > **Web Service**.
-3. Connect your GitHub repository: `https://github.com/MohithKumarVemuri/ATS-Resume-Builder`.
-4. Configure the Web Service:
-   - **Name**: `ats-resume-builder-server`
+### 2. Backend Deployment (Vercel Serverless Function)
+1. In [Vercel](https://vercel.com/), click **Add New...** > **Project** and import this repository.
+2. Settings:
+   - **Project Name**: `ats-resume-builder-server`
+   - **Framework Preset**: `Other`
    - **Root Directory**: `server`
-   - **Runtime**: `Node`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-   - **Instance Type**: `Free`
-5. Under **Environment Variables**, add the following:
-
-| Key | Example / Description |
-|---|---|
-| `PORT` | `5000` |
-| `NODE_ENV` | `production` |
-| `MONGODB_URI` | *Your MongoDB Atlas connection string from Step 1* |
-| `JWT_SECRET` | *A random secure 32+ character string* |
-| `JWT_EXPIRES_IN` | `7d` |
-| `GEMINI_API_KEY` | *Your API Key from [Google AI Studio](https://aistudio.google.com/)* |
-| `CLIENT_URL` | `*` *(or your Vercel URL once deployed in Step 3)* |
-| `GOOGLE_CLIENT_ID` | *(Optional) Your Google OAuth Client ID* |
-
-6. Click **Deploy Web Service**.
-7. Once deployed, note down your Render backend URL (e.g., `https://ats-resume-builder-server.onrender.com`).
+3. Environment Variables:
+   - `NODE_ENV`: `production`
+   - `MONGODB_URI`: *Your MongoDB connection string*
+   - `JWT_SECRET`: *A secure random 32+ character string*
+   - `JWT_EXPIRES_IN`: `7d`
+   - `CLIENT_URL`: `*` *(or your frontend Vercel URL)*
+   - `GEMINI_API_KEY`: *Your Google AI Studio API Key*
+   - `GOOGLE_CLIENT_ID`: *Your Google OAuth Web Client ID*
+4. Click **Deploy**.
 
 ---
 
-### Step 3: Deploy Frontend to Vercel
-
-1. Sign in to [Vercel](https://vercel.com/).
-2. Click **Add New...** > **Project**.
-3. Import your `ATS-Resume-Builder` repository.
-4. In the project configuration:
+### 3. Frontend Deployment (Vercel Vite App)
+1. In [Vercel](https://vercel.com/), click **Add New...** > **Project** and import this repository again.
+2. Settings:
+   - **Project Name**: `ats-resume-builder-client`
    - **Framework Preset**: `Vite`
-   - **Root Directory**: Click **Edit** and choose `client`
-5. Expand **Environment Variables** and add:
-
-| Key | Value |
-|---|---|
-| `VITE_API_URL` | `https://<your-render-backend-name>.onrender.com/api` |
-| `VITE_GOOGLE_CLIENT_ID` | *(Optional) Your Google OAuth Client ID* |
-
-6. Click **Deploy**.
-7. Once complete, update `CLIENT_URL` in your Render backend settings to your new Vercel URL (e.g., `https://ats-resume-builder.vercel.app`).
+   - **Root Directory**: `client`
+3. Environment Variables:
+   - `VITE_API_URL`: `https://ats-resume-builder-gray.vercel.app/api`
+   - `VITE_GOOGLE_CLIENT_ID`: *Your Google OAuth Web Client ID*
+4. Click **Deploy**.
 
 ---
 
